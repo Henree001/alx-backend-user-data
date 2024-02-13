@@ -10,7 +10,10 @@ import mysql.connector
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, seperator) -> str:
+def filter_datum(
+    fields: List[str], redaction: str, message: str, seperator: str
+) -> str:
+    """returns the log message obfuscated"""
     spilted = message.split(seperator)
     for i in fields:
         for j in range(len(spilted)):
