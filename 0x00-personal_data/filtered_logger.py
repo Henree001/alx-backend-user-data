@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """filter_datum function definition"""
 import re
-from typing import List, Union
+from typing import List
 import logging
 import os
 import mysql.connector
@@ -35,7 +35,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Get database function"""
     # Get database credentials from environment variables
     db_username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
@@ -46,8 +46,7 @@ def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
     # Connect to the MySQL database
     try:
         connection = mysql.connector.connect(
-            user=db_username, password=db_password, host=db_host,
-            database=db_name
+            user=db_username, password=db_password, host=db_host, database=db_name
         )
         return connection
     except mysql.connector.Error as err:
@@ -67,6 +66,7 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """Filter values in incoming log records using filter_datum"""
         return filter_datum(
             self.fields, self.REDACTION, super().format(record), self.SEPARATOR
         )
