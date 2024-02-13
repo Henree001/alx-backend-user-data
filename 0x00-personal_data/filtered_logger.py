@@ -10,9 +10,7 @@ import mysql.connector
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(
-    fields: List[str], redaction: str, message: str, seperator: str
-) -> str:
+def filter_datum(fields: List[str], redaction: str, message: str, seperator) -> str:
     spilted = message.split(seperator)
     for i in fields:
         for j in range(len(spilted)):
@@ -43,8 +41,7 @@ def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
     # Connect to the MySQL database
     try:
         connection = mysql.connector.connect(
-            user=db_username, password=db_password, host=db_host,
-            database=db_name
+            user=db_username, password=db_password, host=db_host, database=db_name
         )
         return connection
     except mysql.connector.Error as err:
