@@ -44,14 +44,12 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     db_name = os.getenv("PERSONAL_DATA_DB_NAME")
 
     # Connect to the MySQL database
-    try:
-        connection = mysql.connector.connect(
-            user=db_username, password=db_password, host=db_host, database=db_name
-        )
-        return connection
-    except mysql.connector.Error as err:
-        print("Error connecting to the database:", err)
-        return None
+
+    connection = mysql.connector.connection.MySQLConnection(
+        user=db_username, password=db_password, host=db_host,
+        database=db_name
+    )
+    return connection
 
 
 class RedactingFormatter(logging.Formatter):
