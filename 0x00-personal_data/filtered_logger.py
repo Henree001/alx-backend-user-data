@@ -46,7 +46,8 @@ def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
     # Connect to the MySQL database
     try:
         connection = mysql.connector.connect(
-            user=db_username, password=db_password, host=db_host, database=db_name
+            user=db_username, password=db_password, host=db_host,
+            database=db_name
         )
         return connection
     except mysql.connector.Error as err:
