@@ -11,15 +11,17 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(
-    fields: List[str], redaction: str, message: str, seperator: str
+    fields: List[str], redaction: str, message: str, separator: str
 ) -> str:
     """returns the log message obfuscated"""
-    spilted = message.split(seperator)
-    for i in fields:
-        for j in range(len(spilted)):
-            if i in spilted[j]:
-                spilted[j] = re.sub(r"=(.*)", f"={redaction}", spilted[j])
-    return seperator.join(spilted)
+    formatted_msg = message
+    for field in fields:
+        formatted_msg = re.sub(
+            field + "=.*?" + separator,
+            field + "=" + redaction + separator,
+            formatted_msg,
+        )
+    return formatted_msg
 
 
 def get_logger() -> logging.Logger:
@@ -59,7 +61,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]) -> None:
+    def __init__(self, fields: List[str]):
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
