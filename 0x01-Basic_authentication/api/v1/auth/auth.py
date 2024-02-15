@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 """ Module of Auth views
 """
 from flask import request, jsonify, make_response
