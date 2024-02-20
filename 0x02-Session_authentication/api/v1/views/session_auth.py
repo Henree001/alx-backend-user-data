@@ -6,7 +6,7 @@ from models.user import User
 import os
 
 
-@app_views.route("/auth_session/login/", methods=["POST"], strict_slashes=False)
+@app_views.route("/auth_session/login", methods=["POST"], strict_slashes=False)
 def login():
     """Login session"""
     email = request.form.get("email")
@@ -20,14 +20,16 @@ def login():
     except Exception:
         return None
     if len(user) == 0 or user is None:
-        return jsonify({"error": "no user found for this email"}), 400
+        return jsonify({"error": "no user found for this email"}), 404
     if not user[0].is_valid_password(password):
-        return jsonify({"error": "wrong password"}), 400
+        return jsonify({"error": "wrong password"}), 401
     from api.v1.app import auth
 
     session_id = auth.create_session(user[0].id)
-    session[os.getenv("SESSION_NAME")] = session_id
-    return jsonify(user[0].to_json())
+    # session[os.getenv("SESSION_NAME")] = session_id
+    response = jsonify(user[0].to_json())
+    response.set_cookie(os.getenv("SESSION_NAME"), session_id)
+    return response
 
 
 @app_views.route(
