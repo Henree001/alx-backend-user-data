@@ -65,9 +65,9 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """Get a reset password token"""
         try:
-            self.db.find_user_by(email=email)
+            self._db.find_user_by(email=email)
             token = _generate_uuid()
-            self.db.update_user(email, reset_token=token)
+            self._db.update_user(email, reset_token=token)
             return token
         except Exception:
             raise ValueError
@@ -75,9 +75,9 @@ class Auth:
     def update_password(self, reset_token: str, password: str) -> None:
         """Update a password"""
         try:
-            user = self.db.find_user_by(reset_token=reset_token)
+            user = self._db.find_user_by(reset_token=reset_token)
             hashed_password = _hash_password(password)
-            self.db.update_user(
+            self._db.update_user(
                 user.id, hashed_password=hashed_password, reset_token=None
             )
         except Exception:
