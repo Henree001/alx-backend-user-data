@@ -42,7 +42,7 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """Create a session"""
-        session_id = self._generate_uuid()
+        session_id = _generate_uuid()
         user = self._db.find_user_by(email=email)
         self._db.update_user(user.id, session_id=session_id)
         return session_id
