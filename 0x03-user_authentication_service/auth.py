@@ -36,13 +36,14 @@ class Auth:
         """Validate login"""
         try:
             user = self._db.find_user_by(email=email)
-            return bcrypt.checkpw(password.encode("utf-8"), user.hashed_password)
+            return bcrypt.checkpw(password.encode("utf-8"),
+                                  user.hashed_password)
         except Exception:
             return False
 
     def create_session(self, email: str) -> str:
         """Create a session"""
-        session_id = _generate_uuid()
+        session_id = self._generate_uuid()
         user = self._db.find_user_by(email=email)
         self._db.update_user(user.id, session_id=session_id)
         return session_id
@@ -67,7 +68,7 @@ class Auth:
             token = _generate_uuid()
             self.db.update_user(email, reset_token=token)
             return token
-        except NoResultFound:
+        except Exception:
             raise ValueError
 
     def update_password(self, reset_token: str, password: str) -> None:
