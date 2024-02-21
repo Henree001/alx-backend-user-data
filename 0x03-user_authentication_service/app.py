@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 from flask import Flask, jsonify, request, abort, redirect
 from auth import Auth
 
